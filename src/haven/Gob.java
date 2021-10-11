@@ -599,6 +599,13 @@ public class Gob implements RenderTree.Node, Sprite.Owner, Skeleton.ModOwner, Sk
 				try {
 					Resource res = Gob.this.getres();
 					if(res != null) {
+						if(Config.proximityPlayerLogout.val && type == Gob.Type.PLAYER && id != glob.sess.ui.gui.plid) {
+							KinInfo kin = getattr(KinInfo.class);
+							if (kin == null || kin.group == 2) {
+								glob.sess.ui.gui.act("lo");
+								Audio.play(Resource.local().loadwait("sfx/alarms/timer"));
+							}
+						}
 						if(!alarmPlayed.contains(id)) {
 							if(AlarmManager.play(res.name, Gob.this))
 								alarmPlayed.add(id);

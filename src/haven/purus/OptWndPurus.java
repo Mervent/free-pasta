@@ -397,6 +397,16 @@ public class OptWndPurus extends BetterWindow {
 			}
 		}, "Proximity aggro players when clicked"));
 
+		combatSettings.addSubentry(new Entry(new CheckBox("Proximiy player logout"){
+			{a = Config.proximityPlayerLogout.val;}
+			@Override
+			public boolean mousedown(Coord c, int button) {
+				Config.proximityPlayerLogout.setVal(!this.a);
+				return super.mousedown(c, button);
+			}
+		}, "Proximiy player logout"));
+		
+
 		Entry debugSettings = new Entry(new Label("Debug Settings"), "Debug Settings");
 		((Label)debugSettings.w).setcolor(Color.ORANGE);
 		el.root.addSubentry(debugSettings);

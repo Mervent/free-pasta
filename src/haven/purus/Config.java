@@ -128,6 +128,7 @@ public class Config {
 	public static Setting<ArrayList<TimerWnd.Timer>> timersSet = new Setting<>("timersSet", new ArrayList<>());
 
 	public static Setting<Boolean> proximityPlayerAggro = new Setting<>("proximityPlayerAggro", false);
+	public static Setting<Boolean> proximityPlayerLogout = new Setting<>("proximityPlayerLogout", false);
 	public static Setting<Boolean> proximityKritterAggro = new Setting<>("proximityKritterAggro", true);
 
 	public static Setting<Boolean> reverseBadCamX = new Setting<>("reverseBadCamX", false);
