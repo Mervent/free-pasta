@@ -45,7 +45,7 @@ public class ErrorHandler extends ThreadGroup {
     private final ThreadGroup initial;
     private Map<String, Object> props = new HashMap<String, Object>();
     private Reporter reporter;
-	
+
     public static ErrorHandler find() {
 	for(ThreadGroup tg = Thread.currentThread().getThreadGroup(); tg != null; tg = tg.getParent()) {
 	    if(tg instanceof ErrorHandler)
@@ -59,7 +59,7 @@ public class ErrorHandler extends ThreadGroup {
 	if(tg != null)
 	    tg.lsetprop(key, val);
     }
-    
+
     public void lsetprop(String key, Object val) {
 	props.put(key, val);
     }
@@ -67,13 +67,13 @@ public class ErrorHandler extends ThreadGroup {
     private class Reporter extends Thread {
 	private Queue<Report> errors = new LinkedList<Report>();
 	private ErrorStatus status;
-	
+
 	public Reporter(ErrorStatus status) {
 	    super(initial, "Error reporter");
 	    setDaemon(true);
 	    this.status = status;
 	}
-	
+
 	public void run() {
 	    while(true) {
 		synchronized(errors) {
@@ -93,7 +93,7 @@ public class ErrorHandler extends ThreadGroup {
 		}
 	    }
 	}
-	
+
 	private void doreport(Report r) throws IOException {
 	    if(!status.goterror(r.t))
 		return;
@@ -125,10 +125,10 @@ public class ErrorHandler extends ThreadGroup {
 		status.done(null, null);
 	    }
 	}
-    
+
 	public void report(Thread th, Throwable t) {
 	    Report r = new Report(t);
-		Sentry.init("https://d3a350784ffa476ab87784c74c9f2f84@o361368.ingest.sentry.io/5692958?release=" + Config.version + ":" + Config.gitrev);
+		Sentry.init("https://2e5493caa68743f5b202cd3ca2d71c89@o434481.ingest.sentry.io/6002269release=" + Config.version + ":" + Config.gitrev);
 		Sentry.getContext().addTag("Java", System.getProperty("java.runtime.version"));
 		Sentry.getContext().addTag("OS", System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch"));
 		Sentry.capture(t);
@@ -175,15 +175,15 @@ public class ErrorHandler extends ThreadGroup {
 	reporter.start();
 	defprops();
     }
-    
+
     public ErrorHandler(URL errordest) {
 	this(new ErrorStatus.Simple(), errordest);
     }
-    
+
     public void sethandler(ErrorStatus handler) {
 	reporter.status = handler;
     }
-    
+
     public void uncaughtException(Thread t, Throwable e) {
 	reporter.report(t, e);
     }
