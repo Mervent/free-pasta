@@ -20,7 +20,7 @@
 
   <target name="hafen-client" depends="build-env">
     <javac srcdir="src" destdir="build/classes" debug="on"
-	   source="1.8" target="15" includeantruntime="no">
+	   source="11" target="11" includeantruntime="no">
       <classpath>
 	<pathelement path="lib/jogl.jar" />
 	<pathelement path="lib/gluegen-rt.jar" />
@@ -136,8 +136,9 @@
       <fileset dir="lib/jogl-natives" />
     </copy>
 	<copy todir="build" file="etc/run.sh" />
+	<copy todir="build" file="etc/run.bat" />
   </target>
-  
+ 
   <target name="deftgt" depends="jars, appletview" />
 
   <target name="run" depends="jars">
@@ -149,7 +150,7 @@
       <sysproperty key="haven.dbtext" value="on" />
     </java>
   </target>
-  
+
   <target name="clean">
     <delete dir="build" />
   </target>
@@ -160,7 +161,7 @@
 			<zipfileset dir="build/lib" includes="gson-2.8.5.jar slf4j-api.jar slf4j-simple.jar jackson-core.jar sentry-4.3.0.jar py4j-0.10.9.2.jar json.jar sqlite-jdbc-3.32.3.2.jar pasta-res.jar alarms" prefix="lib/"/>
 		</zip>
 	</target>
-  
+
   <target name="profile" depends="jars">
     <nbprofiledirect>
     </nbprofiledirect>
