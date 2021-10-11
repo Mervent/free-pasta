@@ -2304,17 +2304,13 @@ public class MapView extends PView implements DTarget, Console.Directory {
     }
     
     public boolean drop(final Coord cc, Coord ul) {
-		MCache map = ui.sess.glob.map;
-		Gob pl = gameui().map.player();
-		if(pl != null ) {
-			int t = map.gettile(gameui().map.player().rc.floor(tilesz));
-			Resource res = map.tilesetr(t);
-			if(!ui.modmeta && res != null && (res.name.equals("gfx/tiles/water") || res.name.equals("gfx/tiles/deep") || res.name.equals("gfx/tiles/odeeper") || res.name.equals("gfx/tiles/odeep") || res.name.equals("gfx/tiles/owater")))
-				return false;
-		}
 	new Hittest(cc) {
 	    public void hit(Coord pc, Coord2d mc, ClickData inf) {
-		wdgmsg("drop", pc, mc.floor(posres), ui.modflags());
+		if (ui.modctrl) {
+			wdgmsg("drop", pc, mc.floor(posres), ui.modflags());
+		} else {
+			wdgmsg("click", pc, mc.floor(posres), 1, 0);
+		}
 	    }
 	}.run();
 	return(true);
