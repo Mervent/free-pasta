@@ -35,6 +35,7 @@ import haven.purus.pbot.api.PBotSession;
 import haven.purus.timer.TimerWnd;
 import haven.free.FEPMeter;
 import haven.free.HungerMeter;
+import haven.free.MeterHost;
 
 import java.io.File;
 import java.util.*;
@@ -58,8 +59,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
     public GobIcon.Settings iconconf;
     public MiniMap mmap;
     public Fightview fv;
-    private List<Widget> meters = new LinkedList<Widget>();
-    private List<Widget> cmeters = new LinkedList<Widget>();
+    public List<Widget> meters = new LinkedList<Widget>();
+    private MeterHost custommeters;
     private Text lastmsg;
     private double msgtime;
     public Window invwnd, equwnd, srchwnd, iconwnd;
@@ -350,6 +351,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 				belt[i] = bs;
 
 		}
+	this.custommeters = new MeterHost(this);
     }
 
     protected void attached() {
@@ -827,38 +829,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 	}
     }
 
-    private final BMap<String, Window> wndids = new HashBMap<String, Window>();
-
-    public void addcmeter(Widget meter) {
-	ulpanel.add(meter);
-	cmeters.add(meter);
-	updcmeters();
-    }
-
-    public <T extends Widget> void delcmeter(Class<T> cl) {
-	Widget widget = null;
-	for (Widget meter : cmeters) {
-	    if (cl.isAssignableFrom(meter.getClass())) {
-		widget = meter;
-		break;
-	    }
-	}
-	if (widget != null) {
-	    cmeters.remove(widget);
-	    widget.destroy();
-	    updcmeters();
-	}
-    }
-
-    private void updcmeters() {
-	int i = meters.size();
-	for (Widget meter : cmeters) {
-	    int x = ( i % 3) * (IMeter.fsz.x + 5);
-	    int y = (i / 3) * (IMeter.fsz.y + 2);
-	    meter.c = new Coord(portrait.c.x + portrait.sz.x + 10 + x, portrait.c.y + y);
-	    i++;
-	}
-    }
+    private final BMap<String, Window> wndids = new HashBMap<String, Window>();    
 
     public void addchild(Widget child, Object... args) {
 	String place = ((String)args[0]).intern();
@@ -918,8 +889,8 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 	} else if(place == "chr") {
 	    chrwdg = add((CharWnd)child, Utils.getprefc("wndc-chr", new Coord(300, 50)));
 	    chrwdg.hide();
-	    addcmeter(new HungerMeter(chrwdg.glut));
-	    addcmeter(new FEPMeter(chrwdg.feps));
+	    custommeters.addcmeter(new HungerMeter(chrwdg.glut));
+	    custommeters.addcmeter(new FEPMeter(chrwdg.feps));
 	} else if(place == "craft") {
 	    makewnd.add(child);
 		makewnd.pack();
@@ -939,7 +910,7 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 	    int y = (meters.size() / 3) * (IMeter.fsz.y + UI.scale(2));
 	    ulpanel.add(child, portrait.c.x + portrait.sz.x + UI.scale(10) + x, portrait.c.y + y);
 	    meters.add(child);
-	    updcmeters();
+	    custommeters.updcmeters();
 	} else if(place == "buff") {
 	    buffs.addchild(child);
 	} else if(place == "qq") {
