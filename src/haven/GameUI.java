@@ -36,6 +36,7 @@ import haven.purus.timer.TimerWnd;
 import haven.free.FEPMeter;
 import haven.free.HungerMeter;
 import haven.free.MeterHost;
+import haven.free.automation.PickForageable;
 
 import java.io.File;
 import java.util.*;
@@ -1529,6 +1530,10 @@ public class GameUI extends ConsoleHost implements Console.Directory {
 	} else if((key == 27) && (map != null) && !map.hasfocus) {
 	    setfocus(map);
 	    return(true);
+	} else if (!ev.isShiftDown() && ev.getKeyCode() == KeyEvent.VK_Q) {
+		Thread t = new Thread(new PickForageable(this), "PickForageable");
+		t.start();
+		return true;
 	}
 	return(super.globtype(key, ev));
     }
