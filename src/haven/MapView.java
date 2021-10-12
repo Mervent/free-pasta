@@ -2195,7 +2195,7 @@ public class MapView extends PView implements DTarget, Console.Directory {
 						if(gc != null) {
 							if(gc.gob != null) {
 								Resource res = gc.gob.getres();
-								StringBuilder sb = new StringBuilder(gc.gob.id + " " + gc.clickargs(inf)[3] + " " + gc.clickargs(inf)[4] + "\n");
+								StringBuilder sb = new StringBuilder(gc.gob.id + "\n");
 								if(res != null) {
 									sb.append(gc.gob.getres().toString());
 									for(Gob.Overlay o : gc.gob.ols) {
@@ -2207,22 +2207,7 @@ public class MapView extends PView implements DTarget, Console.Directory {
 										} catch(Loading l) {
 										}
 									}
-									Drawable d = gc.gob.getattr(Drawable.class);
-									if(d instanceof ResDrawable) {
-										sb.append("\n sdt:");
-										for(int i=0; i<((ResDrawable) d).sdt.rbuf.length; i++) {
-											int sdt = ((ResDrawable) d).sdt.peekrbuf(i);
-											for(int j=7; j>=0; j--)
-												sb.append((sdt & (1<<j)) != 0 ? 1 : 0);
-											sb.append(" ").append(sdt);
-										}
-									}
-									if(d != null) {
-										d.getres().layers(FastMesh.MeshRes.class).stream()
-												.map(mr -> String.format("\n meshid: %s %s %s", mr.id, mr.getres().name, (mr.mat != null ? mr.mat.getres().name : "")))
-												.distinct()
-												.forEach(sb::append);
-									}
+									Drawable d = gc.gob.getattr(Drawable.class);									
 									if(d instanceof Composite) {
 										Composite comp = (Composite)d;
 										for(ResData rd:comp.prevposes) {
@@ -2233,7 +2218,6 @@ public class MapView extends PView implements DTarget, Console.Directory {
 											}
 										}
 									}
-									sb.append("\n").append(gc.gob.getc()).append(" ").append(gc.gob.getv());
 									tooltip = sb.toString().replaceAll("\\$", "#").replaceAll("\\{", "(").replaceAll("}", ")");
 									return;
 								}
